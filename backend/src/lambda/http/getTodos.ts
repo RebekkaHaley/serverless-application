@@ -60,7 +60,7 @@ async function getTodosPerUser(userId: string) {
     TableName: todosTable,
     KeyConditionExpression: 'userId = :userId',
     ExpressionAttributeValues: {
-      'userId': userId
+      ':userId': userId
     },
     ScanIndexForward: false  // reverse item sort order (latest todos first)
   }).promise()
