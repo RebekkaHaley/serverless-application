@@ -7,7 +7,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x # changed from 8.10
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
