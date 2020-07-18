@@ -23,7 +23,6 @@ provider:
     IMAGES_S3_BUCKET: serverless-todo-images-${self:provider.randomnum}-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
-
 custom:
   serverless-iam-roles-per-function:
     defaultInherit: true
@@ -39,6 +38,14 @@ functions:
       - http:
           method: get
           path: todos
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+
 
   # TODO: Configure this function
   GetTodos:
