@@ -13,9 +13,9 @@ provider:
   region: ${opt:region, 'eu-west-2'}
   randomnum: "457653846587"
 
-#  tracing:
-#    lambda: true
-#    apiGateway: true
+  #  tracing:
+  #    lambda: true
+  #    apiGateway: true
 
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
@@ -107,7 +107,7 @@ functions:
           method: post
           path: todos/{todoId}/attachment
           cors: true
-          authorizer: Auth   
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -120,11 +120,22 @@ functions:
       - Effect: Allow
         Action:
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*  
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
