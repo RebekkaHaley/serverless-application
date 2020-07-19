@@ -35,12 +35,12 @@ custom:
         title: Serverless TODO Application
         description: Serverless application for users to manage their TODO items
     models:
-      - name: GroupRequest
+      - name: TodoCreateRequest
         contentType: application/json
-        schema: ${file(models/create-group-request.json)}
-      - name: ImageRequest
+        schema: ${file(models/create-todo-request.json)}
+      - name: TodoUpdateRequest
         contentType: application/json
-        schema: ${file(models/create-image-request.json)}
+        schema: ${file(models/update-todo-request.json)}
 
 functions:
   Auth:
@@ -75,7 +75,7 @@ functions:
             summary: Create a new TODO for a current user
             description: Create a new TODO for a current user
             requestModels:
-              "application/json": TodoCreate
+              "application/json": TodoCreateRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -96,7 +96,7 @@ functions:
             summary: Update a TODO item created by a current user
             description: Update a TODO item created by a current user
             requestModels:
-              "application/json": TodoUpdate
+              "application/json": TodoUpdateRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
