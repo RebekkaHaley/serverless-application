@@ -28,6 +28,20 @@ custom:
   serverless-iam-roles-per-function:
     defaultInherit: true
 
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Serverless TODO Application
+        description: Serverless application for users to manage their TODO items
+    models:
+      - name: GroupRequest
+        contentType: application/json
+        schema: ${file(models/create-group-request.json)}
+      - name: ImageRequest
+        contentType: application/json
+        schema: ${file(models/create-image-request.json)}
+
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
