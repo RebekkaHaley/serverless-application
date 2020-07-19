@@ -175,7 +175,7 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
-      
+
     # Attachments
 
     AttachmentsBucket:
