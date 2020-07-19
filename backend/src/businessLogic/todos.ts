@@ -1,7 +1,9 @@
 import * as uuid from 'uuid'
 
-import { Group } from '../models/Group'
-import { GroupAccess } from '../dataLayer/groupsAccess'
+import { TodoItem } from '../models/TodoItem'
+import { TodoUpdate } from '../models/TodoUpdate'
+
+import { GroupAccess } from '../dataLayer/todosAccess'
 import { CreateGroupRequest } from '../requests/CreateGroupRequest'
 import { getUserId } from '../auth/utils'
 
