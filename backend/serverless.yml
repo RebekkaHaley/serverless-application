@@ -4,6 +4,7 @@ service:
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
 
 provider:
   name: aws
@@ -55,6 +56,12 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new TODO for a current user
+            description: Create a new TODO for a current user
+            requestModels:
+              "application/json": TodoCreate
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -70,6 +77,12 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update a TODO item created by a current user
+            description: Update a TODO item created by a current user
+            requestModels:
+              "application/json": TodoUpdate
     iamRoleStatements:
       - Effect: Allow
         Action:
