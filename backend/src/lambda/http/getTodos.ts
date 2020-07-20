@@ -1,69 +1,35 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
-import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
 
-const XAWS = AWSXRay.captureAWS(AWS)
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-const docClient = new XAWS.DynamoDB.DocumentClient()
+import * as middy from 'middy'
+import { cors } from 'middy/middlewares'
 
-const todosTable = process.env.TODOS_TABLE
-const usersTable = process.env.USERS_TABLE
+import { getAllTodos } from '../../businessLogic/todos'
+import { createLogger } from '../../utils/logger'
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  // TODO: Get all TODO items for a current user
-  console.log('Caller event', event)
-  const userId = event.pathParameters.userId
-  const validUserId = await userExists(userId)
 
-  if (!validUserId) {
-    return {
-      statusCode: 404,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        error: 'User does not exist'
-      })
-    }
-  }
+const logger = createLogger('getTodosHandler')
 
-  const todos = await getTodosPerUser(userId)
+export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  // Log API calls
+  logger.info('Get todos for current user', event)
+
+  // DONE: Get a single TODO item
+  const authorization = event.headers.Authorization
+  const split = authorization.split(' ')
+  const jwtToken = split[1]
+
+  const todos = await getAllTodos(jwtToken)
 
   return {
-    statusCode: 201,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({
-      items: todos
-    })
+    statusCode: 200,
+    body: JSON.stringify(items: todos)
   }
-}
+})
 
-async function userExists(userId: string) {
-  const result = await docClient
-    .get({
-      TableName: usersTable,
-      Key: {
-        id: userId
-      }
-    })
-    .promise()
-
-  console.log('Get user: ', result)
-  return !!result.Item
-}
-
-async function getTodosPerUser(userId: string) {
-  const result = await docClient.query({
-    TableName: todosTable,
-    KeyConditionExpression: 'userId = :userId',
-    ExpressionAttributeValues: {
-      ':userId': userId
-    },
-    ScanIndexForward: false  // reverse item sort order (latest todos first)
-  }).promise()
-
-  return result.Items
-}
+handler.use(
+  cors({
+    credentials: true
+  })
+)
