@@ -46,7 +46,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   const uploadUrl = getUploadUrl(imageId)
 
   // Create an image end
-  
+
   return {
     statusCode: 201,
     body: JSON.stringify({
