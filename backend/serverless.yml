@@ -157,7 +157,7 @@ functions:
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
+    # DONE: Add any necessary AWS resources
     # API
 
     GatewayResponseDefault4XX:
