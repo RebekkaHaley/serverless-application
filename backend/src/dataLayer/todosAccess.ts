@@ -93,7 +93,7 @@ export class TodoAccess {
         ':attachmentUrl': attachmentUrl
       },
       ReturnValues: 'UPDATED_NEW'
-    }).promise();
+    }).promise()
   }
 
 }
