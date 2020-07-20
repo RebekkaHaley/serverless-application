@@ -3,29 +3,42 @@ import * as uuid from 'uuid'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
-import { GroupAccess } from '../dataLayer/todosAccess'
-import { CreateGroupRequest } from '../requests/CreateGroupRequest'
-import { getUserId } from '../auth/utils'
+import { TodoAccess } from '../dataLayer/todosAccess'
 
-const groupAccess = new GroupAccess()
+import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
-export async function getAllGroups(): Promise<Group[]> {
-  return groupAccess.getAllGroups()
+import { parseUserId } from '../auth/utils'
+
+const todoAccess = new TodoAccess()
+
+export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
+  const userId = parseUserId(jwtToken) // Use pre-made function
+  return todoAccess.getAllTodos(userId)
 }
 
-export async function createGroup(
-  createGroupRequest: CreateGroupRequest,
-  jwtToken: string
-): Promise<Group> {
-
+export async function createTodo(createTodoRequest: CreateTodoRequest, jwtToken: string): Promise<Todo> {
   const itemId = uuid.v4()
-  const userId = getUserId(jwtToken)
+  const userId = parseUserId(jwtToken) // Use pre-made function
 
-  return await groupAccess.createGroup({
-    id: itemId,
+  return await todoAccess.createTodo({
+    todoId: itemId,
     userId: userId,
-    name: createGroupRequest.name,
-    description: createGroupRequest.description,
-    timestamp: new Date().toISOString()
+    name: createTodoRequest.name,
+    dueDate: createTodoRequest.dueDate,
+    createdAt: new Date().toISOString(),
+    done: false
   })
+}
+
+export async function updateTodo(todoId: string, updateTodoRequest: UpdateTodoRequest, jwtToken: string): Promise<void> {
+  const userId = parseUserId(jwtToken) // Use pre-made function
+  const todo = await todoAccess.getTodo(todoId, userId)
+  todoAccess.updateTodo(todo.todoId, todo.createdAt, updateTodoRequest)
+}
+
+export async function deleteTodo(todoId: string, jwtToken: string): Promise<void> {
+  const userId = parseUserId(jwtToken) // Use pre-made function
+  const todo = await todoAccess.getTodo(todoId, userId)
+  todoAccess.deleteTodo(todo.todoId, todo.createdAt)
 }
