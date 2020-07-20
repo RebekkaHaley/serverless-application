@@ -7,6 +7,10 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
 
+# Uncomment to enable individual packaging
+# package:
+#   individually: true
+
 provider:
   name: aws
   runtime: nodejs12.x # changed from 8.10
@@ -127,7 +131,7 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
 
-  # TODO: Configure this function
+  # DONE: Configure this function
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -136,6 +140,7 @@ functions:
           path: todos/{todoId}/attachment
           cors: true
           authorizer: Auth
+    # iamRoleStatementsName: serverless-todo-app-dev-GenerateUploadUrl-lambdaRole
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -208,13 +213,8 @@ resources:
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
-      DependsOn: SNSTopicPolicy
       Properties:
         BucketName: ${self:provider.environment.IMAGES_S3_BUCKET}
-        NotificationConfiguration:
-          TopicConfigurations:
-            - Event: s3:ObjectCreated:Put
-              Topic: !Ref ImagesTopic
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
