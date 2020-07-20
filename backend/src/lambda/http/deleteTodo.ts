@@ -13,10 +13,12 @@ const logger = createLogger('deleteTodoHandler')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // Log API calls
-  logger.info('Delete a todo', event)
+  logger.info('Delete a todo for current user', event)
 
   // DONE: Remove a TODO item by id
   const todoId = event.pathParameters.todoId
+
+  // Get auth token for user
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]

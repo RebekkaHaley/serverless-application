@@ -16,6 +16,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   logger.info('Get todos for current user', event)
 
   // DONE: Get a single TODO item
+
+  // Get auth token for user
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
