@@ -17,7 +17,7 @@ export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
   return todoAccess.getAllTodos(userId)
 }
 
-export async function createTodo(createTodoRequest: CreateTodoRequest, jwtToken: string): Promise<Todo> {
+export async function createTodo(createTodoRequest: CreateTodoRequest, jwtToken: string): Promise<TodoItem> {
   const itemId = uuid.v4()
   const userId = parseUserId(jwtToken) // Use pre-made function
 
@@ -41,4 +41,10 @@ export async function deleteTodo(todoId: string, jwtToken: string): Promise<void
   const userId = parseUserId(jwtToken) // Use pre-made function
   const todo = await todoAccess.getTodo(todoId, userId)
   todoAccess.deleteTodo(todo.todoId, todo.createdAt)
+}
+
+export async function setAttachmentUrl(todoId: string, attachmentUrl: string, jwtToken: string): Promise<void> {
+  const userId = parseUserId(jwtToken) // Use pre-made function
+  const todo = await todoAccess.getTodo(todoId, userId)
+  todoAccess.setAttachmentUrl(todo.todoId, todo.createdAt, attachmentUrl)
 }
