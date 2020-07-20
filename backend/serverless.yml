@@ -28,7 +28,6 @@ provider:
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: serverless-todo-images-${self:provider.randomnum}-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    IS_OFFLINE: false
 
 custom:
   serverless-iam-roles-per-function:
