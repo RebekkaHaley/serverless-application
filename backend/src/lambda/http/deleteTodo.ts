@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
@@ -15,12 +15,12 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   // Log API calls
   logger.info('Delete a todo', event)
 
+  // DONE: Remove a TODO item by id
   const todoId = event.pathParameters.todoId
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
 
-  // DONE: Remove a TODO item by id
   await deleteTodo(todoId, jwtToken)
 
   return {
