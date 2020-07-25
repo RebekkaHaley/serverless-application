@@ -80,7 +80,7 @@
 				{
 					"name": "Update todo",
 					"request": {
-						"method": "PUT",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -96,10 +96,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Water flowers\",\n\t\"dueDate\": \"2020-06-06\",\n\t\"done\": true\n}"
+							"raw": "{\n\t\"name\": \"Water all the flowers\",\n\t\"dueDate\": \"2020-01-01\",\n\t\"done\": true\n}"
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/{{todoId}}",
+							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/{{updateTodoId}}",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -111,7 +111,7 @@
 							"path": [
 								"dev",
 								"todos",
-								"{{todoId}}"
+								"{{updateTodoId}}"
 							]
 						}
 					},
@@ -139,7 +139,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/fe671583-4512-45f6-9475-4265c04362fb",
+							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/{{deleteTodoId}}",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -151,7 +151,7 @@
 							"path": [
 								"dev",
 								"todos",
-								"fe671583-4512-45f6-9475-4265c04362fb"
+								"{{deleteTodoId}}"
 							]
 						}
 					},
@@ -173,7 +173,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/3836b777-9bc4-4429-9b79-ba4e4f5f91c0/attachment",
+							"raw": "https://{{apiId}}.execute-api.eu-west-2.amazonaws.com/dev/todos/{{attachmentTodoId}}/attachment",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -185,7 +185,7 @@
 							"path": [
 								"dev",
 								"todos",
-								"3836b777-9bc4-4429-9b79-ba4e4f5f91c0",
+								"{{attachmentTodoId}}",
 								"attachment"
 							]
 						}
@@ -242,19 +242,29 @@
 	],
 	"variable": [
 		{
-			"id": "6f35e3b8-1be4-4701-9ab0-41f49ec24164",
+			"id": "ba4e1165-7c65-4e44-bbd5-6d85f3be3646",
 			"key": "apiId",
-			"value": ""
+			"value": "g65iy40yob"
 		},
 		{
-			"id": "5d44428c-c56d-4306-81e3-29a5b941bb72",
+			"id": "a0b3915f-cb14-40a0-8a5c-a8dddf02d6ff",
 			"key": "authToken",
-			"value": ""
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkRldnV3Q3pMQ3A3LWFMOWxRbHNaUyJ9.eyJpc3MiOiJodHRwczovL2Rldi1lYi1vOGZnbi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYxNjFhOWQ3N2NhYzUwMDE0M2EwMDk5IiwiYXVkIjoibDNzOWwxVzFRc3lad0tTaEhWYjAwMU5rOGZOa1hhSm8iLCJpYXQiOjE1OTU2ODg2NTYsImV4cCI6MTU5NTcyNDY1NiwiYXRfaGFzaCI6InNYbWhrYVM3SUNPOG5TVWtTaTRqSEEiLCJub25jZSI6IlhpVjBLcEtzN25iX2UyLmdlSXFmUGozeG9hdVNKZDc2In0.V216TxBZGKYKMtPU6US-_Bh97ziRAS4ghbvkRpRjdiA3d2DiBQGgPh5n4VnyfyozIli2rPCjWW7sJbJmlwYQ0pDb51wm4ZQ8uw8Iw3lbIEF0F8kaKd07OUBgXcivxEAgo6bnMPKjw1jTtGYAlDk7MP4ZjMZbCWvHFB2xW8Hoon871u1JJ9DT7enY1z-Slv7JWnXzY-c35RctL7GVxmRuTpTRCSFzxN690ZQEDBWWEMtzxZ9KdWToC_ivAx2ng-5JG0NixQQgDJSaXsZikEKx16ttvwIa_4JQjkdwpAqQDr1P2_7vdelCwCdJVTXvvrSUP07u8AdbMY1W1ztS1Vq7TQ"
 		},
 		{
-			"id": "b4dc920a-4630-48fe-aa6a-7a91a641ed7a",
-			"key": "todoId",
-			"value": ""
+			"id": "312a21c6-029b-4a57-a99e-98ed7c64fb58",
+			"key": "updateTodoId",
+			"value": "d356d4b7-f1af-47ba-a144-207f460ea4be"
+		},
+		{
+			"id": "b26961eb-697f-473e-ac4e-326faf9f6e34",
+			"key": "deleteTodoId",
+			"value": "3993f114-5759-4afe-a721-6242ec67649b"
+		},
+		{
+			"id": "fd675aec-08c9-45a1-9523-3a9c74d2047d",
+			"key": "attachmentTodoId",
+			"value": "226aa9c3-0468-4505-b481-1dd720c03717"
 		}
 	],
 	"protocolProfileBehavior": {}
