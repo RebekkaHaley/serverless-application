@@ -12,15 +12,16 @@ export class TodoAccess {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly todosTable = process.env.TODOS_TABLE,
-    private readonly userIdIndex = process.env.USER_ID_INDEX
+    // private readonly userIdIndex = process.env.USER_ID_INDEX
   ) { }
 
+  // NB: REFACTORED:
   async getAllTodos(userId: string): Promise<TodoItem[]> {
     console.log('Getting all todos')
 
-    const result = await this.docClient.scan({
+    const result = await this.docClient.query({
       TableName: this.todosTable,
-      FilterExpression: 'userId = :userId',
+      KeyConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: { ':userId': userId }
     }).promise()
 
@@ -28,6 +29,7 @@ export class TodoAccess {
     return items as TodoItem[]
   }
 
+  // NB: NO NEED TO REFACTOR:
   async createTodo(todoItem: TodoItem): Promise<TodoItem> {
     await this.docClient.put({
       TableName: this.todosTable,
@@ -37,28 +39,13 @@ export class TodoAccess {
     return todoItem
   }
 
-  async getTodo(todoId: string, userId: string): Promise<TodoItem> {
-    const result = await this.docClient
-      .query({
-        TableName: this.todosTable,
-        IndexName: this.userIdIndex,
-        KeyConditionExpression: 'todoId = :todoId and userId = :userId',
-        ExpressionAttributeValues: {
-          ':todoId': todoId,
-          ':userId': userId
-        }
-      }).promise()
-
-    const item = result.Items[0]
-    return item as TodoItem
-  }
-
-  async updateTodo(todoId: string, createdAt: string, todoUpdate: TodoUpdate): Promise<void> {
-    this.docClient.update({
+  // NB: REFACTORED:
+  async updateTodo(todoId: string, userId: string, todoUpdate: TodoUpdate): Promise<TodoUpdate> {
+    await this.docClient.update({
       TableName: this.todosTable,
       Key: {
         todoId,
-        createdAt
+        userId
       },
       UpdateExpression: 'set #n = :name, done = :done, dueDate = :dueDate',
       ExpressionAttributeValues: {
@@ -69,24 +56,28 @@ export class TodoAccess {
       ExpressionAttributeNames: { '#n': 'name' },
       ReturnValues: 'UPDATED_NEW',
     }).promise()
+
+    return todoUpdate
   }
 
-  async deleteTodo(todoId: string, createdAt: string): Promise<void> {
-    this.docClient.delete({
+  // NB: REFACTORED:
+  async deleteTodo(todoId: string, userId: string): Promise<void> {
+    await this.docClient.delete({
       TableName: this.todosTable,
       Key: {
         todoId,
-        createdAt
+        userId
       }
     }).promise()
   }
 
-  async setAttachmentUrl(todoId: string, createdAt: string, attachmentUrl: string): Promise<void> {
-    this.docClient.update({
+  // NB: REFACTORED:
+  async setAttachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<void> {
+    await this.docClient.update({
       TableName: this.todosTable,
       Key: {
         todoId,
-        createdAt
+        userId
       },
       UpdateExpression: 'set attachmentUrl = :attachmentUrl',
       ExpressionAttributeValues: {
@@ -95,7 +86,6 @@ export class TodoAccess {
       ReturnValues: 'UPDATED_NEW'
     }).promise()
   }
-
 }
 
 function createDynamoDBClient() {
