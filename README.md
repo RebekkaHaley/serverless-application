@@ -18,7 +18,7 @@ The application stores TODO items, and each TODO item contains the following fie
 * `attachmentUrl` (string) - a URL pointing to an image attached to a TODO item
 * `userId` (string) - an id of a user who created a TODO item
 
-# Functions to be implemented
+# Functions implemented
 
 The following functions were implemented, and then configured in the `serverless.yml` file:
 
